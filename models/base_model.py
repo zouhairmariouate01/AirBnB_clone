@@ -1,49 +1,74 @@
-#!/usr/bin/python3
-"""Defines the BaseModel class."""
+#!/usr/bin/env python3
+
+"""
+    base_model module.
+
+    Module that contains, BaseModel class which all classes of inherit from.
+"""
+
+
+import uuid
 import models
-from uuid import uuid4
 from datetime import datetime
 
 
 class BaseModel:
-    """Represents the BaseModel of the HBnB project."""
+    """
+        BaseModel class.
+    """
 
     def __init__(self, *args, **kwargs):
-        """Initialize a new BaseModel.
-        Args:
-            *args (any): Unused.
-            **kwargs (dict): Key/value pairs of attributes.
         """
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.today()
-        if len(kwargs) != 0:
-            for k, v in kwargs.items():
-                if k == "created_at" or k == "updated_at":
-                    self.__dict__[k] = datetime.strptime(v, tform)
+            BaseModel's Constructor.
+
+            args (list): list of arguments, not not used.
+            kwargs (dict): dictionary of attribute names and its values.
+        """
+        if kwargs is not None and kwargs != {}:
+            for key in kwargs:
+                if key == "created_at":
+                    self.__dict__["created_at"] = datetime.strptime(
+                        kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
+                elif key == "updated_at":
+                    self.__dict__["updated_at"] = datetime.strptime(
+                        kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
                 else:
-                    self.__dict__[k] = v
+                    self.__dict__[key] = kwargs[key]
         else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
             models.storage.new(self)
 
+    def __str__(self):
+        """
+            function that returns a string representation of
+            the current object.
+
+            Return:
+                (str): string representation of the current object.
+        """
+        return (f"[{type(self).__name__}] ({self.id}) {self.__dict__}")
+
     def save(self):
-        """Update updated_at with the current datetime."""
-        self.updated_at = datetime.today()
+        """
+            function that updates the current object, and assign the
+            update_at with the current date & time.
+        """
+        self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
-        """Return the dictionary of the BaseModel instance.
-        Includes the key/value pair __class__ representing
-        the class name of the object.
         """
-        rdict = self.__dict__.copy()
-        rdict["created_at"] = self.created_at.isoformat()
-        rdict["updated_at"] = self.updated_at.isoformat()
-        rdict["__class__"] = self.__class__.__name__
-        return rdict
+            function that returns a dictionary containing all keys/values
+            of the instance.
 
-    def __str__(self):
-        """Return the print/str representation of the BaseModel instance."""
-        clname = self.__class__.__name__
-        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
+            Return:
+                (dict): dictionary containing all keys/values of
+                current instance.
+        """
+        dic = self.__dict__.copy()
+        dic["__class__"] = type(self).__name__
+        dic["created_at"] = dic["created_at"].isoformat()
+        dic["updated_at"] = dic["updated_at"].isoformat()
+        return dic
