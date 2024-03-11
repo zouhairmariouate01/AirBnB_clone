@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
-
+"""This module contains a class called User that inherits from 'BaseModel'
+"""
 from models.base_model import BaseModel
-
-"""
-    User module.
-    This modele contains a class of User.
-"""
 
 
 class User(BaseModel):
     """
-        Class of User.
-        To create a user instance, that has the next
-        attributes:
-            email, password, first_name and last_name.
+    Public class attributes:
+        email: string - empty string
+        password: string - empty string
+        first_name: string - empty string
+        last_name: string - empty string
     """
+    email = ''
+    password = ''
+    first_name = ''
+    last_name = ''
 
-    email = ""
-    password = ""
-    first_name = ""
-    last_name = ""
+    def __init__(self, *args, **kwargs):
+        if len(kwargs) == 0:
+            super().__init__()
+
+        # if kwargs have values
+        if len(kwargs) > 0:
+            super().__init__(**kwargs)
