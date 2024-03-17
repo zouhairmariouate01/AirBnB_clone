@@ -1,0 +1,32 @@
+.container .places {
+    width: 100%;
+}
+
+.container h1 {
+    font-size: 30px;
+}
+
+.container .places ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .places ul article {
+    width: 390px;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid #FF5A5F;
+    border-radius: 4px;
+}
+
+.container ul article h2 {
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
